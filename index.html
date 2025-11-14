@@ -626,7 +626,7 @@
             transform: scale(1.1);
         }
 
-        /* --- 6. Integrations Section (POP ANIMATION SLOWED) --- */
+        /* --- 6. Integrations Section --- */
         .integrations-section {
             padding-top: 6rem; /* Preserved Padding */
             padding-bottom: 6rem; /* Preserved Padding */
@@ -664,7 +664,6 @@
             gap: 2.5rem; 
         }
         
-        /* Animation Keyframes for Pop Effect */
         @keyframes popFadeIn {
             0% { 
                 opacity: 0; 
@@ -684,22 +683,17 @@
             width: auto; 
             object-fit: contain;
             filter: grayscale(0);
-            
-            /* Initialize hidden state for animation */
             opacity: 0; 
-            
-            transition: filter 0.2s ease; /* Keep filter transition for hover */
+            transition: filter 0.2s ease; 
         }
         
-        /* Class to apply via JS */
         .integrations-grid img.animate-pop {
-            /* Changed from 0.6s to 1.2s for slower pop */
             animation: popFadeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         .integrations-grid img:hover {
             filter: grayscale(1);
-            opacity: 0.6 !important; /* Ensure opacity stays visible on hover */
+            opacity: 0.6 !important; 
         }
 
         .integrations-grid .logo-bosta { }
@@ -709,13 +703,13 @@
         }
         .integrations-grid .logo-shopify {
             height: 90px;
-            width: 250px !important;
+            width: 400px;
             max-height: 90px; 
          }
         .integrations-grid .logo-woocommerce { }
 
 
-        /* --- 7. Features Section --- */
+        /* --- 7. Features Section (SPLIT LAYOUT) --- */
         .features-section {
             padding-top: 5rem; 
             padding-bottom: 5rem;
@@ -726,46 +720,130 @@
             margin-left: auto;
             margin-right: auto;
             text-align: center;
-        }
-        
-        .features-grid {
-            margin-top: 4rem; 
-            margin-left: auto;
-            margin-right: auto;
-            max-width: 42rem; 
-            display: grid;
-            grid-template-columns: repeat(1, minmax(0, 1fr));
-            gap: 2rem; 
-        }
-        
-        .feature-card {
-            display: flex;
-            flex-direction: column;
-            border-radius: 0.75rem; 
-            border: 1px solid var(--brand-border);
-            background-color: var(--brand-card);
-            padding: 2rem; 
-            transition: all 0.3s ease;
-        }
-        .feature-card:hover {
-            border-color: rgba(39, 174, 96, 0.5); 
-        }
-        
-        .feature-card h3 {
-            font-size: 1.125rem; 
-            font-weight: 600; 
-            line-height: 1.75rem; 
-            color: white;
-        }
-        
-        .feature-card p {
-            margin-top: 0.5rem; 
-            font-size: 1rem; 
-            line-height: 1.75rem; 
-            color: var(--brand-text-grey);
+            margin-bottom: 4rem;
         }
 
-        /* --- 8. Pricing Section --- */
+        .features-split-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        /* Left Side: Text Content */
+        .features-text-content {
+            width: 100%;
+            text-align: center; /* Mobile default */
+        }
+
+        .features-text-content h2 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .features-text-content p {
+            font-size: 1.125rem;
+            line-height: 1.7;
+            color: var(--brand-text-grey);
+            margin-bottom: 2rem;
+        }
+
+        /* Feature List */
+        .features-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+            text-align: left; 
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--brand-text);
+            font-weight: 500;
+        }
+
+        .feature-item svg {
+            width: 1.25rem;
+            height: 1.25rem;
+            color: var(--brand-green-bright);
+            flex-shrink: 0;
+        }
+
+        /* Right Side: Dashboard Visual */
+        .features-visual {
+            width: 100%;
+            position: relative;
+            perspective: 1000px; /* 3D Context */
+        }
+
+        .dashboard-console {
+            position: relative;
+            border-radius: 12px;
+            background: rgba(20, 20, 20, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            /* Default: No tilt on mobile */
+            transform: none;
+            transition: transform 0.5s ease;
+        }
+        
+        .dashboard-console:hover {
+            transform: scale(1.01);
+        }
+
+        .console-scanlines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                to bottom,
+                transparent 0px,
+                transparent 2px,
+                rgba(0, 0, 0, 0.2) 3px
+            );
+            pointer-events: none;
+            z-index: 3;
+            opacity: 0.3;
+        }
+
+        .dashboard-img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .dashboard-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 80%;
+            background: radial-gradient(circle, rgba(39, 174, 96, 0.3) 0%, rgba(0,0,0,0) 70%);
+            z-index: -1;
+            filter: blur(50px);
+            opacity: 0.6;
+            animation: pulseGlow 4s infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% { opacity: 0.4; transform: translate(-50%, -50%) scale(0.9); }
+            100% { opacity: 0.7; transform: translate(-50%, -50%) scale(1.1); }
+        }
+
+        /* --- 8. Pricing Section (4 BUNDLES) --- */
         .pricing-section {
             background-color: var(--brand-card);
             padding-top: 5rem; 
@@ -784,7 +862,7 @@
             margin-top: 4rem; 
             margin-left: auto;
             margin-right: auto;
-            max-width: 28rem; 
+            max-width: 1280px; /* Allow width for 4 columns */
             display: grid;
             grid-template-columns: repeat(1, minmax(0, 1fr));
             gap: 2rem; 
@@ -798,10 +876,18 @@
             border: 1px solid var(--brand-border);
             background-color: var(--brand-dark);
             padding: 2rem; 
+            transition: transform 0.2s ease;
         }
+        
+        .pricing-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255,255,255,0.2);
+        }
+
         .pricing-card-highlighted {
             position: relative;
             border: 2px solid var(--brand-green);
+            box-shadow: 0 0 20px rgba(39, 174, 96, 0.15);
         }
         
         .pricing-card-highlighted .badge {
@@ -820,17 +906,25 @@
         }
         
         .pricing-card h3 {
-            font-size: 1.125rem; 
-            font-weight: 600; 
+            font-size: 1.25rem; 
+            font-weight: 700; 
             line-height: 1.75rem; 
-            color: var(--brand-green);
+            color: white;
+            margin-bottom: 0.25rem;
         }
+        
+        /* Specific Colors for Bundle Titles to differentiate */
+        .pricing-card.tier-1 h3 { color: #9ca3af; } /* Pilot - Grey */
+        .pricing-card.tier-2 h3 { color: #60a5fa; } /* Starter - Blue */
+        .pricing-card.tier-3 h3 { color: var(--brand-green-bright); } /* Pro - Green */
+        .pricing-card.tier-4 h3 { color: #facc15; } /* Scale - Gold */
 
         .pricing-card .plan-description {
             margin-top: 0.5rem; 
-            font-size: 1rem; 
-            line-height: 1.75rem; 
+            font-size: 0.9rem; 
+            line-height: 1.5; 
             color: var(--brand-text-grey);
+            min-height: 3rem; /* Align heights */
         }
         
         .pricing-card .plan-price {
@@ -840,7 +934,7 @@
             gap: 0.25rem; 
         }
         .plan-price-amount {
-            font-size: 2.25rem; 
+            font-size: 2rem; 
             font-weight: 700; 
             letter-spacing: -0.025em; 
             color: white;
@@ -866,7 +960,7 @@
             gap: 0.75rem; 
         }
         .pricing-features-list svg {
-            height: 1.5rem; 
+            height: 1.25rem; 
             width: 1.25rem; 
             flex-shrink: 0;
             color: var(--brand-green);
@@ -875,7 +969,7 @@
 
         .pricing-card .btn-cta {
             display: block;
-            margin-top: 2.5rem; 
+            margin-top: 2rem; 
             text-align: center;
             font-size: 0.875rem; 
             font-weight: 600; 
@@ -898,14 +992,13 @@
         }
         
         .pricing-card .btn-cta-secondary {
-            background-color: var(--brand-border);
+            background-color: transparent;
             color: white;
             border: 1px solid var(--brand-border); 
         }
         .pricing-card .btn-cta-secondary:hover {
-            background-color: var(--brand-green);
-            color: var(--brand-dark);
-            border-color: var(--brand-green);
+            background-color: var(--brand-border);
+            color: white;
         }
 
         /* --- 9. Final CTA Section --- */
@@ -1051,6 +1144,12 @@
             .footer-grid {
                 grid-template-columns: repeat(4, minmax(0, 1fr)); 
             }
+            
+            /* Pricing Grid: 2x2 on Tablet */
+            .pricing-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                max-width: 800px;
+            }
         }
         
         /* Large screens (lg: 1024px) */
@@ -1130,17 +1229,40 @@
                 margin-right: 0;
             }
 
-            .features-grid {
-                margin-left: 0;
-                margin-right: 0;
-                max-width: none;
-                grid-template-columns: repeat(3, minmax(0, 1fr));
+            /* --- FEATURES SECTION DESKTOP UPDATES --- */
+            .features-split-layout {
+                flex-direction: row; /* Side by side */
+                gap: 4rem;
+                align-items: center;
             }
+
+            /* Text Area (Left) */
+            .features-text-content {
+                flex: 1; /* Take up proportional space */
+                text-align: left; /* Align left on desktop */
+                max-width: 45%;
+            }
+            
+            .features-list {
+                margin-left: 0; /* Reset auto margins */
+                margin-right: 0;
+            }
+
+            /* Image Area (Right) */
+            .features-visual {
+                flex: 1.2; /* Take slightly more space */
+            }
+            .dashboard-console {
+                /* Inward tilt towards the text */
+                transform: rotateY(-5deg);
+            }
+            
+            /* --- PRICING 4-COL GRID --- */
             .pricing-grid {
                 margin-left: 0;
                 margin-right: 0;
-                max-width: none;
-                grid-template-columns: repeat(3, minmax(0, 1fr));
+                max-width: none; /* Allow full width */
+                grid-template-columns: repeat(4, minmax(0, 1fr)); /* 4 Columns */
             }
         }
 
@@ -1344,36 +1466,46 @@
 
         <section id="features" class="features-section">
             <div class="container">
-                <div class="features-header">
-                    <h2 class="section-title">All Your Post-Checkout Operations in One Place</h2>
-                    <p class="section-subtitle">From smart address fixing to AI-powered insights, we've got you covered.</p>
-                </div>
+                
+                <div class="features-split-layout">
+                    
+                    <div class="features-text-content">
+                        <h2>All Your Operations in <br> <span style="color: var(--brand-green);">One Single View</span></h2>
+                        <p>
+                            Stop jumping between tabs. Our centralized dashboard gives you a bird's-eye view of your entire confirmation process. Monitor real-time statistics, track agent performance, and see live delivery updates from your courier partners—all in one place.
+                        </p>
+                        
+                        <div class="features-list">
+                            <div class="feature-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                                <span>Real-time Confirmation Rates</span>
+                            </div>
+                            <div class="feature-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                                <span>AI-Powered Reply Analysis</span>
+                            </div>
+                            <div class="feature-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                                <span>Smart WhatsApp Templates</span>
+                            </div>
+                            <div class="feature-item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                                <span>Direct Courier API Integration</span>
+                            </div>
+                        </div>
 
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <h3>Real-time Dashboard with ✨ AI Insights</h3>
-                        <p>Monitor confirmation rates, cancellations, and delivery statuses. Now with a "Get Insights" button that uses AI to analyze your data and suggest actionable improvements.</p>
+                        <a href="#" class="btn btn-primary">Explore Dashboard</a>
                     </div>
-                    <div class="feature-card">
-                        <h3>✨ AI-Powered Reply Analysis</h3>
-                        <p>Our AI goes beyond 'yes' or 'no'. It understands complex replies, Arabic slang, and address typos. It extracts intent (e.g., "confirm, but deliver at 5 PM") to automate smarter.</p>
+
+                    <div class="features-visual">
+                        <div class="dashboard-console">
+                            <div class="console-scanlines"></div>
+                            <img class="dashboard-img" src="imgs/dashhh.png" alt="Dashboard Interface"
+                            onerror="this.src='https://placehold.co/800x500/1e1e1e/3a3a3a?text=Dashboard+Screenshot'; this.onerror=null;">
+                        </div>
+                        <div class="dashboard-glow"></div>
                     </div>
-                    <div class="feature-card">
-                        <h3>✨ AI WhatsApp Template Generator</h3>
-                        <p>Struggling with what to write? Just set a goal (like "abandoned cart" or "order confirmation") and our AI will instantly generate high-conversion message templates for you.</p>
-                    </div>
-                    <div class="feature-card">
-                        <h3>Shopify & WooCommerce Sync</h3>
-                        <p>One-click integration to automatically import orders and sync back confirmation statuses to your e-commerce platform.</p>
-                    </div>
-                    <div class="feature-card">
-                        <h3>Direct Courier Integration</h3>
-                        <p>Seamless API connection to Bosta, Khazenly, and more. Confirmed orders are sent for delivery instantly.</p>
-                    </div>
-                    <div class="feature-card">
-                        <h3>Multi-Brand Support</h3>
-                        <p>Manage multiple e-commerce stores or brands from a single Confirm It account with ease.</p>
-                    </div>
+
                 </div>
             </div>
         </section>
@@ -1386,91 +1518,75 @@
                 </div>
 
                 <div class="pricing-grid">
-                    <div class="pricing-card">
+                    
+                    <div class="pricing-card tier-1">
                         <div>
-                            <h3>Starter</h3>
-                            <p class="plan-description">For new brands getting started with automation.</p>
+                            <h3>Pilot</h3>
+                            <p class="plan-description">Perfect for testing the waters.</p>
                             <p class="plan-price">
-                                <span class="plan-price-amount">$XX</span>
-                                <span class="plan-price-period">/month</span>
+                                <span class="plan-price-amount">Free</span>
                             </p>
                             <ul class="pricing-features-list">
-                                <li>
-                                    <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" /></svg>
-                                    Up to 500 Confirmations /mo
-                                </li>
-                                <li>
-                                    <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" /></svg>
-                                    1 Brand
-                                </li>
-                                <li>
-                                    <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" /></svg>
-                                    Shopify & WooCommerce
-                                </li>
+                                <li><svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" /></svg>50 Confirmations /mo</li>
+                                <li><svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" /></svg>1 Brand</li>
+                                <li><svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" /></svg>Manual Uploads</li>
+                            </ul>
+                        </div>
+                        <a href="#" class="btn-cta btn-cta-secondary">Get Started</a>
+                    </div>
+
+                    <div class="pricing-card tier-2">
+                        <div>
+                            <h3>Starter</h3>
+                            <p class="plan-description">For small shops automating daily tasks.</p>
+                            <p class="plan-price">
+                                <span class="plan-price-amount">$29</span>
+                                <span class="plan-price-period">/mo</span>
+                            </p>
+                            <ul class="pricing-features-list">
+                                <li><svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" /></svg>500 Confirmations</li>
+                                <li><svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" /></svg>Shopify & Woo Sync</li>
+                                <li><svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" /></svg>Basic Support</li>
                             </ul>
                         </div>
                         <a href="#" class="btn-cta btn-cta-secondary">Start Free Trial</a>
                     </div>
 
-                    <div class="pricing-card pricing-card-highlighted">
-                        <div class="badge">Most Popular</div>
+                    <div class="pricing-card pricing-card-highlighted tier-3">
+                        <div class="badge">Best Value</div>
                         <div>
-                            <h3>Growth</h3>
-                            <p class="plan-description">For scaling businesses that need full automation.</p>
+                            <h3>Pro</h3>
+                            <p class="plan-description">Full automation for growing brands.</p>
                             <p class="plan-price">
-                                <span class="plan-price-amount">$XXX</span>
-                                <span class="plan-price-period">/month</span>
+                                <span class="plan-price-amount">$79</span>
+                                <span class="plan-price-period">/mo</span>
                             </p>
                             <ul class="pricing-features-list">
-                                <li>
-                                    <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" /></svg>
-                                    Up to 2000 Confirmations /mo
-                                </li>
-                                <li>
-                                    <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" /></svg>
-                                    3 Brands
-                                </li>
-                                <li>
-                                    <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" /></svg>
-                                    Full Delivery API Integrations
-                                </li>
-                                <li>
-                                    <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" /></svg>
-                                    ✨ AI-Powered Reply Analysis
-                                </li>
+                                <li><svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" /></svg>2,000 Confirmations</li>
+                                <li><svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" /></svg>Full Courier API</li>
+                                <li><svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" /></svg>AI Reply Analysis</li>
                             </ul>
                         </div>
                         <a href="#" class="btn-cta btn-cta-primary">Start Free Trial</a>
                     </div>
 
-                    <div class="pricing-card">
+                    <div class="pricing-card tier-4">
                         <div>
-                            <h3>Enterprise</h3>
-                            <p class="plan-description">For large-scale operations with custom needs.</p>
+                            <h3>Scale</h3>
+                            <p class="plan-description">High volume & custom integrations.</p>
                             <p class="plan-price">
-                                <span class="plan-price-amount">Custom</span>
+                                <span class="plan-price-amount">$199</span>
+                                <span class="plan-price-period">/mo</span>
                             </p>
                             <ul class="pricing-features-list">
-                                <li>
-                                    <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" /></svg>
-                                    Unlimited Confirmations
-                                </li>
-                                <li>
-                                    <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" /></svg>
-                                    Unlimited Brands
-                                </li>
-                                <li>
-                                    <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" /></svg>
-                                    Custom Integrations (CRM, ERP)
-                                </li>
-                                <li>
-                                    <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" /></svg>
-                                    Dedicated Priority Support
-                                </li>
+                                <li><svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" /></svg>Unlimited Confirmations</li>
+                                <li><svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" /></svg>Dedicated Support</li>
+                                <li><svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" /></svg>Custom CRM/ERP</li>
                             </ul>
                         </div>
                         <a href="#" class="btn-cta btn-cta-secondary">Contact Sales</a>
                     </div>
+
                 </div>
             </div>
         </section>
@@ -1660,11 +1776,13 @@
                     }
                 });
 
+                // 1. Reset ALL active states first
                 dots.forEach(dot => {
                     dot.classList.remove('active');
                     dot.closest('.how-it-works-step').classList.remove('active-step');
                 });
 
+                // 2. Activate ONLY the closest one found
                 if (closestDot && minDistance < 250) {
                     closestDot.classList.add('active');
                     closestDot.closest('.how-it-works-step').classList.add('active-step');
