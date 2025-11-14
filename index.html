@@ -569,10 +569,10 @@
             color: var(--brand-text-grey);
         }
 
-        /* --- 6. Integrations Section --- */
+        /* --- 6. Integrations Section (POP ANIMATION ADDED) --- */
         .integrations-section {
-            padding-top: 5rem; 
-            padding-bottom: 5rem;
+            padding-top: 6rem; /* Preserved Padding */
+            padding-bottom: 6rem; /* Preserved Padding */
             background-color: var(--brand-card); 
         }
 
@@ -589,7 +589,7 @@
             display: flex;
             flex-direction: column;
             align-items: center; 
-            gap: 3rem; 
+            gap: 8rem; 
         }
         
         .integrations-row {
@@ -600,24 +600,48 @@
         }
 
         .integrations-row-1 {
-            gap: 2.5rem; 
+            gap: 6.5rem; 
         }
 
         .integrations-row-2 {
             gap: 2.5rem; 
         }
         
+        /* Animation Keyframes for Pop Effect */
+        @keyframes popFadeIn {
+            0% { 
+                opacity: 0; 
+                transform: scale(0.8); 
+            }
+            60% {
+                transform: scale(1.05); /* Slight bounce */
+            }
+            100% { 
+                opacity: 1; 
+                transform: scale(1); 
+            }
+        }
+
         .integrations-grid img {
             max-height: 4rem; 
             width: auto; 
             object-fit: contain;
             filter: grayscale(0);
-            opacity: 1;
-            transition: all 0.2s ease;
+            
+            /* Initialize hidden state for animation */
+            opacity: 0; 
+            
+            transition: filter 0.2s ease; /* Keep filter transition for hover */
         }
+        
+        /* Class to apply via JS */
+        .integrations-grid img.animate-pop {
+            animation: popFadeIn 0.6s ease-out forwards;
+        }
+
         .integrations-grid img:hover {
             filter: grayscale(1);
-            opacity: 0.6;
+            opacity: 0.6 !important; /* Ensure opacity stays visible on hover */
         }
 
         .integrations-grid .logo-bosta { }
@@ -627,10 +651,12 @@
         }
         .integrations-grid .logo-shopify {
             height: 90px;
-            width: 400px;
+            width: 300px;
             max-height: 90px; 
          }
-        .integrations-grid .logo-woocommerce { }
+        .integrations-grid .logo-woocommerce {
+
+         }
 
 
         /* --- 7. Features Section --- */
@@ -934,12 +960,17 @@
                 font-size: 3.75rem; 
             }
             .integrations-section,
-            .how-it-works-section,
+            
             .features-section,
             .pricing-section,
             .cta-section {
                 padding-top: 6rem; 
                 padding-bottom: 6rem;
+            }
+            .how-it-works-section{
+                padding-top: 6rem; 
+                padding-bottom: 0rem;
+
             }
             .features-grid {
                 margin-top: 5rem; 
@@ -1465,8 +1496,8 @@
     </footer>
 
     <script>
-        // 1. Mobile Menu Logic
         document.addEventListener('DOMContentLoaded', () => {
+            // Mobile Menu Logic
             const menuBtn = document.getElementById('menu-btn');
             const mobileMenu = document.getElementById('mobile-menu');
             const openIcon = document.getElementById('menu-open-icon');
@@ -1485,70 +1516,75 @@
                     closeIcon.style.display = 'none';
                 });
             });
+
+            // Integration Pop Animation Logic
+            const integrationSection = document.querySelector('#integrations');
+            const integrationLogos = document.querySelectorAll('.integrations-grid img');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        integrationLogos.forEach((logo, index) => {
+                            // Stagger animation: index * 0.15s delay
+                            logo.style.animationDelay = `${index * 0.15}s`;
+                            logo.classList.add('animate-pop');
+                        });
+                        observer.unobserve(entry.target); // Run once
+                    }
+                });
+            }, { threshold: 0.2 });
+
+            if(integrationSection) {
+                observer.observe(integrationSection);
+            }
         });
 
-        // 2. Ambient Line Scroll Logic
+        // Ambient Line Scroll Logic
         window.addEventListener('scroll', () => {
             const grid = document.getElementById('howItWorksGrid');
             const fill = document.getElementById('timelineLineFill');
             const dots = document.querySelectorAll('.timeline-dot');
 
-            // Only run on desktop (where we showed the line)
             if (window.innerWidth >= 1024) {
                 const rect = grid.getBoundingClientRect();
                 const windowHeight = window.innerHeight;
                 
-                // BEAM SETTINGS
-                const beamHeight = 200; // Must match CSS height
+                const beamHeight = 200; 
                 const totalTrackHeight = rect.height;
                 
-                // Start calculating when the grid top enters the "active zone" of the screen
-                const activationOffset = windowHeight * 0.6; // 60% down the screen
-                
-                // How far have we scrolled into the grid?
-                // (activationOffset - rect.top) gives pixel distance scrolled past trigger point
+                const activationOffset = windowHeight * 0.6; 
                 let scrollDistance = activationOffset - rect.top;
-                
-                // Percentage of the way through the grid (0 to 1)
                 let scrollPercentage = scrollDistance / totalTrackHeight;
 
                 if (scrollPercentage < 0) scrollPercentage = 0;
                 if (scrollPercentage > 1) scrollPercentage = 1;
 
-                // Calculate the beam's top position relative to the grid container
-                // We want the beam to reach the bottom of the container when scroll is 100%
                 let beamTop = (totalTrackHeight * scrollPercentage) - (beamHeight / 2);
-                
-                // Apply position
                 fill.style.top = `${beamTop}px`;
 
-                // DOT ACTIVATION LOGIC
-                // The "active point" is the very bottom tip of the beam
-                const beamTipPosition = beamTop + beamHeight;
+                // New Dot Logic: Calculate Beam Tip position relative to the grid
+                const beamBottom = beamTop + beamHeight;
 
-                // Find the single closest dot to the beam tip
                 let closestDot = null;
                 let minDistance = Infinity;
 
                 dots.forEach(dot => {
-                    // CRITICAL FIX: Calculate Dot Position relative to the main grid, not just its parent step.
-                    // Because dots are absolute inside relative steps, dot.offsetTop is small (e.g., 32px).
-                    // We need (Step's Top relative to Grid) + (Dot's Top relative to Step).
+                    // Get dot's position relative to the main grid container
+                    // We add the step's top offset to the dot's internal top offset
                     const stepParent = dot.closest('.how-it-works-step');
-                    const dotTop = stepParent.offsetTop + dot.offsetTop;
+                    const dotTopRelative = stepParent.offsetTop + dot.offsetTop;
                     
-                    const distance = Math.abs(beamTipPosition - dotTop);
+                    const distance = Math.abs(beamBottom - dotTopRelative);
                     
-                    // We check if this dot is the closest one we've found so far to the beam tip
+                    // Find the dot closest to the beam tip
                     if (distance < minDistance) {
                         minDistance = distance;
                         closestDot = dot;
                     }
                 });
 
-                // Activate only if within a reasonable range (e.g., 250px)
-                // Increased range ensures dots don't "miss" if scrolling fast or gaps vary
                 dots.forEach(dot => dot.classList.remove('active'));
+                // Increased threshold to 250px to ensure dots don't get skipped
                 if (closestDot && minDistance < 250) {
                     closestDot.classList.add('active');
                 }
