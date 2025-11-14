@@ -186,15 +186,43 @@
             font-family: var(--font-nav); 
         }
 
+        /* --- NAVBAR HOVER LINE LOGIC --- */
         .nav-desktop a {
             font-weight: 500; 
             color: var(--brand-text-grey);
             transition: color 0.2s ease;
-            font-size: 0.95rem; 
+            font-size: 0.95rem;
+            position: relative; 
+            padding-bottom: 4px; 
         }
+        
+        .nav-desktop a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--brand-green-bright); 
+            transform: scaleX(0); 
+            transform-origin: right; 
+            transition: transform 0.3s ease;
+            box-shadow: 0 0 8px var(--brand-green-bright); 
+        }
+
         .nav-desktop a:hover {
             color: white; 
         }
+        
+        .nav-desktop a:hover::after {
+            transform: scaleX(1); 
+            transform-origin: left; 
+        }
+        
+        .nav-desktop .nav-cta::after {
+            display: none;
+        }
+        /* --- END NAVBAR HOVER LINE LOGIC --- */
 
         .nav-desktop .nav-cta {
             border-radius: 0.5rem; 
@@ -435,8 +463,8 @@
         
         .timeline-line-bg {
             position: absolute;
-            top: 0;
-            bottom: 0;
+            top: 2rem; 
+            bottom: 2rem;
             left: 50%; 
             transform: translateX(-50%);
             width: 2px;
@@ -510,6 +538,7 @@
             z-index: 3; 
         }
         
+        /* --- IMAGE FADE-IN ANIMATION START --- */
         .how-it-works-image-wrapper {
             flex-basis: 50%;
             flex-shrink: 0;
@@ -520,7 +549,27 @@
             background: transparent;
             border: none;
             z-index: 3;
+            
+            /* Hidden State */
+            opacity: 0;
+            /* Odd Steps (1, 3): Image is on Right, so it starts further Right (+50px) */
+            transform: translateX(50px);
+            
+            /* Slow Transition */
+            transition: opacity 1.2s ease-out, transform 1.2s ease-out;
         }
+        
+        /* Even Steps (2, 4): Image is on Left, so it starts further Left (-50px) */
+        .how-it-works-step:nth-child(even) .how-it-works-image-wrapper {
+            transform: translateX(-50px);
+        }
+
+        /* Visible State (Applied via JS) */
+        .how-it-works-image-wrapper.img-visible {
+            opacity: 1;
+            transform: translateX(0) !important; /* Force reset to 0 */
+        }
+        /* --- IMAGE FADE-IN ANIMATION END --- */
         
         .how-it-works-image-wrapper img {
             width: 100%;
@@ -558,6 +607,8 @@
             line-height: 2rem; 
             color: white;
             margin-bottom: 0.5rem; 
+            transition: color 0.3s ease, transform 0.3s ease;
+            transform-origin: center; 
         }
         .how-it-works-text h3 span {
             color: var(--brand-green);
@@ -569,7 +620,13 @@
             color: var(--brand-text-grey);
         }
 
-        /* --- 6. Integrations Section (POP ANIMATION ADDED) --- */
+        /* Active State for the Step Text */
+        .how-it-works-step.active-step .how-it-works-text h3 {
+            color: var(--brand-green);
+            transform: scale(1.1);
+        }
+
+        /* --- 6. Integrations Section (POP ANIMATION SLOWED) --- */
         .integrations-section {
             padding-top: 6rem; /* Preserved Padding */
             padding-bottom: 6rem; /* Preserved Padding */
@@ -636,7 +693,8 @@
         
         /* Class to apply via JS */
         .integrations-grid img.animate-pop {
-            animation: popFadeIn 0.6s ease-out forwards;
+            /* Changed from 0.6s to 1.2s for slower pop */
+            animation: popFadeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         .integrations-grid img:hover {
@@ -651,12 +709,10 @@
         }
         .integrations-grid .logo-shopify {
             height: 90px;
-            width: 300px;
+            width: 400px;
             max-height: 90px; 
          }
-        .integrations-grid .logo-woocommerce {
-
-         }
+        .integrations-grid .logo-woocommerce { }
 
 
         /* --- 7. Features Section --- */
@@ -1517,6 +1573,20 @@
                 });
             });
 
+            // Image Scroll Animation Logic
+            const imageWrappers = document.querySelectorAll('.how-it-works-image-wrapper');
+            const imgObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('img-visible');
+                    }
+                });
+            }, { threshold: 0.3 }); // Trigger when 30% visible
+
+            imageWrappers.forEach(wrapper => {
+                imgObserver.observe(wrapper);
+            });
+
             // Integration Pop Animation Logic
             const integrationSection = document.querySelector('#integrations');
             const integrationLogos = document.querySelectorAll('.integrations-grid img');
@@ -1526,10 +1596,10 @@
                     if (entry.isIntersecting) {
                         integrationLogos.forEach((logo, index) => {
                             // Stagger animation: index * 0.15s delay
-                            logo.style.animationDelay = `${index * 0.15}s`;
+                            logo.style.animationDelay = `${index * 0.3}s`;
                             logo.classList.add('animate-pop');
                         });
-                        observer.unobserve(entry.target); // Run once
+                        observer.unobserve(entry.target); 
                     }
                 });
             }, { threshold: 0.2 });
@@ -1552,41 +1622,52 @@
                 const beamHeight = 200; 
                 const totalTrackHeight = rect.height;
                 
-                const activationOffset = windowHeight * 0.6; 
-                let scrollDistance = activationOffset - rect.top;
-                let scrollPercentage = scrollDistance / totalTrackHeight;
+                // Check if bottom of page is reached
+                const scrolledToBottom = (window.innerHeight + window.scrollY) >= document.body.scrollHeight - 5;
 
-                if (scrollPercentage < 0) scrollPercentage = 0;
-                if (scrollPercentage > 1) scrollPercentage = 1;
+                let scrollPercentage;
 
-                let beamTop = (totalTrackHeight * scrollPercentage) - (beamHeight / 2);
+                if (scrolledToBottom) {
+                    scrollPercentage = 1;
+                } else {
+                    const activationOffset = windowHeight * 0.6; 
+                    let scrollDistance = activationOffset - rect.top;
+                    scrollPercentage = scrollDistance / totalTrackHeight;
+
+                    if (scrollPercentage < 0) scrollPercentage = 0;
+                    if (scrollPercentage > 1) scrollPercentage = 1;
+                }
+
+                // Add offset to ensure it reaches bottom (e.g., +100px buffer)
+                // When percentage is 1, beamTop should push the beam fully to the end
+                let beamTop = ((totalTrackHeight + 100) * scrollPercentage) - (beamHeight / 2);
                 fill.style.top = `${beamTop}px`;
 
-                // New Dot Logic: Calculate Beam Tip position relative to the grid
                 const beamBottom = beamTop + beamHeight;
 
                 let closestDot = null;
                 let minDistance = Infinity;
 
                 dots.forEach(dot => {
-                    // Get dot's position relative to the main grid container
-                    // We add the step's top offset to the dot's internal top offset
                     const stepParent = dot.closest('.how-it-works-step');
                     const dotTopRelative = stepParent.offsetTop + dot.offsetTop;
                     
                     const distance = Math.abs(beamBottom - dotTopRelative);
                     
-                    // Find the dot closest to the beam tip
                     if (distance < minDistance) {
                         minDistance = distance;
                         closestDot = dot;
                     }
                 });
 
-                dots.forEach(dot => dot.classList.remove('active'));
-                // Increased threshold to 250px to ensure dots don't get skipped
+                dots.forEach(dot => {
+                    dot.classList.remove('active');
+                    dot.closest('.how-it-works-step').classList.remove('active-step');
+                });
+
                 if (closestDot && minDistance < 250) {
                     closestDot.classList.add('active');
+                    closestDot.closest('.how-it-works-step').classList.add('active-step');
                 }
             }
         });
