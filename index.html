@@ -552,14 +552,10 @@
             
             /* Hidden State */
             opacity: 0;
-            /* Odd Steps (1, 3): Image is on Right, so it starts further Right (+50px) */
             transform: translateX(50px);
-            
-            /* Slow Transition */
             transition: opacity 1.2s ease-out, transform 1.2s ease-out;
         }
         
-        /* Even Steps (2, 4): Image is on Left, so it starts further Left (-50px) */
         .how-it-works-step:nth-child(even) .how-it-works-image-wrapper {
             transform: translateX(-50px);
         }
@@ -567,7 +563,7 @@
         /* Visible State (Applied via JS) */
         .how-it-works-image-wrapper.img-visible {
             opacity: 1;
-            transform: translateX(0) !important; /* Force reset to 0 */
+            transform: translateX(0) !important; 
         }
         /* --- IMAGE FADE-IN ANIMATION END --- */
         
@@ -628,8 +624,8 @@
 
         /* --- 6. Integrations Section --- */
         .integrations-section {
-            padding-top: 6rem; /* Preserved Padding */
-            padding-bottom: 6rem; /* Preserved Padding */
+            padding-top: 6rem; 
+            padding-bottom: 6rem; 
             background-color: var(--brand-card); 
         }
 
@@ -709,9 +705,10 @@
         .integrations-grid .logo-woocommerce { }
 
 
-        /* --- 7. Features Section (SPLIT LAYOUT) --- */
+        /* --- 7. Features Section (SPLIT LAYOUT - FIXED DROP DOWN) --- */
         .features-section {
-            padding-top: 5rem; 
+            /* 1. Reduce section padding to remove top dead space */
+            padding-top: 0rem !important; 
             padding-bottom: 5rem;
         }
         
@@ -720,7 +717,7 @@
             margin-left: auto;
             margin-right: auto;
             text-align: center;
-            margin-bottom: 4rem;
+            margin-bottom: 1rem; 
         }
 
         .features-split-layout {
@@ -734,6 +731,17 @@
         .features-text-content {
             width: 100%;
             text-align: center; /* Mobile default */
+            
+            /* Initial Hidden State for Animation */
+            opacity: 0;
+            transform: translateX(-50px); /* Fade in from Left */
+            transition: opacity 1.2s ease-out, transform 1.2s ease-out;
+        }
+        
+        /* Active State for Text */
+        .features-text-content.animate-in {
+            opacity: 1;
+            transform: translateX(0);
         }
 
         .features-text-content h2 {
@@ -782,40 +790,38 @@
         .features-visual {
             width: 100%;
             position: relative;
-            perspective: 1000px; /* 3D Context */
+            
+            /* Initial Hidden State for Animation */
+            opacity: 0;
+            transform: translateX(50px); /* CHANGED: Fade in from RIGHT */
+            transition: opacity 1.2s ease-out, transform 1.2s ease-out;
+        }
+        
+        /* Active State for Visual */
+        .features-visual.animate-in {
+            opacity: 1;
+            transform: translateX(0);
         }
 
         .dashboard-console {
             position: relative;
-            border-radius: 12px;
-            background: rgba(20, 20, 20, 0.9);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
-            /* Default: No tilt on mobile */
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            border-radius: 0;
+            
+            /* NO TILT */
             transform: none;
             transition: transform 0.5s ease;
         }
         
+        /* Removed hover tilt */
         .dashboard-console:hover {
-            transform: scale(1.01);
+            transform: none;
         }
 
         .console-scanlines {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(
-                to bottom,
-                transparent 0px,
-                transparent 2px,
-                rgba(0, 0, 0, 0.2) 3px
-            );
-            pointer-events: none;
-            z-index: 3;
-            opacity: 0.3;
+            display: none; 
         }
 
         .dashboard-img {
@@ -843,6 +849,90 @@
             100% { opacity: 0.7; transform: translate(-50%, -50%) scale(1.1); }
         }
 
+        /* Floating HUD over the laptop */
+        .console-hud-bar {
+            position: absolute;
+            /* Moved HUD UP slightly so it hugs the bottom of the laptop image better */
+            bottom: 0; 
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 600px;
+            
+            background: rgba(30, 30, 30, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid rgba(39, 174, 96, 0.5); 
+            
+            border-radius: 12px;
+            padding: 1.5rem;
+            
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            z-index: 10;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .console-hud-text {
+            flex: 1;
+        }
+
+        .console-hud-text h3 {
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--brand-green-bright);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--brand-green-bright);
+            animation: blinkStatus 2s infinite;
+        }
+
+        @keyframes blinkStatus {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .console-hud-text p {
+            color: var(--brand-text-grey);
+            font-size: 0.85rem;
+            line-height: 1.4;
+            margin: 0;
+        }
+
+        .console-hud-action {
+            flex-shrink: 0;
+        }
+        
+        .btn-hud {
+            background: rgba(39, 174, 96, 0.15);
+            color: var(--brand-green-bright);
+            font-size: 0.8rem;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            border: 1px solid rgba(39, 174, 96, 0.3);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+        }
+        .btn-hud:hover {
+            background: var(--brand-green);
+            color: var(--brand-dark);
+        }
+
         /* --- 8. Pricing Section (4 BUNDLES) --- */
         .pricing-section {
             background-color: var(--brand-card);
@@ -862,7 +952,7 @@
             margin-top: 4rem; 
             margin-left: auto;
             margin-right: auto;
-            max-width: 1280px; /* Allow width for 4 columns */
+            max-width: 1280px; 
             display: grid;
             grid-template-columns: repeat(1, minmax(0, 1fr));
             gap: 2rem; 
@@ -913,7 +1003,7 @@
             margin-bottom: 0.25rem;
         }
         
-        /* Specific Colors for Bundle Titles to differentiate */
+        /* Specific Colors for Bundle Titles */
         .pricing-card.tier-1 h3 { color: #9ca3af; } /* Pilot - Grey */
         .pricing-card.tier-2 h3 { color: #60a5fa; } /* Starter - Blue */
         .pricing-card.tier-3 h3 { color: var(--brand-green-bright); } /* Pro - Green */
@@ -1229,32 +1319,40 @@
                 margin-right: 0;
             }
 
-            /* --- FEATURES SECTION DESKTOP UPDATES --- */
+            /* --- FEATURES SECTION DESKTOP UPDATES (IMAGE LIFTED) --- */
+            
             .features-split-layout {
-                flex-direction: row; /* Side by side */
-                gap: 4rem;
-                align-items: center;
+                flex-direction: row; 
+                gap: 2rem; 
+                
+                /* 1. RESET TO FLEX-START to enable offsets */
+                align-items: flex-start; 
             }
 
-            /* Text Area (Left) */
+            /* 2. PUSH TEXT DOWN */
             .features-text-content {
-                flex: 1; /* Take up proportional space */
-                text-align: left; /* Align left on desktop */
-                max-width: 45%;
+                flex: 0.8; 
+                text-align: left; 
+                max-width: 40%;
+                padding-top: 6rem; /* Push text down to center screen level */
             }
             
             .features-list {
-                margin-left: 0; /* Reset auto margins */
+                margin-left: 0; 
                 margin-right: 0;
             }
 
-            /* Image Area (Right) */
+            /* 3. PULL IMAGE UP */
             .features-visual {
-                flex: 1.2; /* Take slightly more space */
+                flex: 1.6; 
+                width: 100%;
+                margin-top: -8rem; /* Physically lift image container */
             }
+            
             .dashboard-console {
-                /* Inward tilt towards the text */
-                transform: rotateY(-5deg);
+                /* Force Flat (No tilt) */
+                transform: none;
+                width: 100%; 
             }
             
             /* --- PRICING 4-COL GRID --- */
@@ -1499,9 +1597,19 @@
 
                     <div class="features-visual">
                         <div class="dashboard-console">
-                            <div class="console-scanlines"></div>
-                            <img class="dashboard-img" src="imgs/image.copy.png" alt="Dashboard Interface"
-                            onerror="this.src='https://placehold.co/800x500/1e1e1e/3a3a3a?text=Dashboard+Screenshot'; this.onerror=null;">
+                            <img class="dashboard-img" src="imgs/BBB.png" alt="Dashboard Interface"
+                            onerror="this.src='https://placehold.co/800x500/1e1e1e/3a3a3a?text=Transparent+Laptop+Mockup'; this.onerror=null;">
+                            
+                            <div class="console-hud-bar">
+                                <div class="console-hud-text">
+                                    <h3><span class="status-dot"></span> Real-Time Command Center</h3>
+                                    <p>Track confirmation rates & live delivery status.</p>
+                                </div>
+                                <div class="console-hud-action">
+                                    <a href="#" class="btn-hud">Live Demo</a>
+                                </div>
+                            </div>
+
                         </div>
                         <div class="dashboard-glow"></div>
                     </div>
@@ -1723,6 +1831,18 @@
             if(integrationSection) {
                 observer.observe(integrationSection);
             }
+            
+            // Features Section Fade In Animation
+            const featuresElements = document.querySelectorAll('.features-text-content, .features-visual');
+            const featuresObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-in');
+                    }
+                });
+            }, { threshold: 0.2 });
+            
+            featuresElements.forEach(el => featuresObserver.observe(el));
         });
 
         // Ambient Line Scroll Logic

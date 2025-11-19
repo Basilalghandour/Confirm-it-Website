@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  body {
+    background-color: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: sans-serif;
+  }
+
+  /* The Laptop Container */
+  .macbook {
+    width: 800px; /* Adjust size here */
+    height: 450px;
+    position: relative;
+    margin: 0 auto;
+  }
+
+  /* The Top/Screen Part */
+  .macbook-top {
+    width: 80%;
+    height: 100%;
+    margin: 0 auto;
+    background: #1a1a1a;
+    border-radius: 20px 20px 0 0;
+    border: 2px solid #b0b0b0;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: inset 0 0 0 2px #000;
+  }
+
+  /* The Camera Dot */
+  .camera {
+    width: 6px;
+    height: 6px;
+    background: #333;
+    border-radius: 50%;
+    position: absolute;
+    top: 12px;
+    z-index: 5;
+  }
+
+  /* The Actual Image Screen */
+  .screen-content {
+    width: 94%;
+    height: 88%;
+    background-color: #000;
+    overflow: hidden;
+    position: relative;
+    top: 5px;
+    /* PLACEHOLDER: Using a div, but in production use <img src="..."> */
+    background-size: cover;
+    background-position: center;
+  }
+
+  /* The Bottom/Base Part */
+  .macbook-bottom {
+    width: 100%;
+    height: 24px;
+    background: #e0e0e0;
+    border-radius: 0 0 20px 20px;
+    position: absolute;
+    bottom: -24px;
+    left: 0;
+    background: linear-gradient(to bottom, #e0e0e0 0%, #d0d0d0 100%);
+  }
+  
+  /* The "Notch" for opening */
+  .macbook-bottom::after {
+    content: '';
+    width: 15%;
+    height: 6px;
+    background: #b0b0b0;
+    position: absolute;
+    top: 0;
+    left: 42.5%;
+    border-radius: 0 0 5px 5px;
+  }
+
+</style>
+</head>
+<body>
+
+<div class="macbook">
+  <div class="macbook-top">
+    <div class="camera"></div>
+    <img class="screen-content" src="imgs/imageecopy.png" alt="Confirm It Dashboard">
+  </div>
+  <div class="macbook-bottom"></div>
+</div>
+
+</body>
+</html>
